@@ -31,6 +31,29 @@ function successCallback(position) {
 const latitude = position.coords.latitude;
 const longitude = position.coords.longitude;
 document.getElementById('locationInfo').innerHTML = `纬度: ${latitude}, 经度: ${longitude}`;
+
+// 发送经纬度数据到Python服务器
+const url = 'http://localhost:5000/receive_location';
+const data = {
+    latitude: latitude,
+    longitude: longitude
+};
+fetch(url, {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data)
+})
+.then(response => response.json())
+.then(data => {
+    console.log('Success:', data);
+    // 可以在这里处理成功发送后的逻辑
+})
+.catch((error) => {
+    console.error('Error:', error);
+});
+
 }
 
 function errorCallback(error) {
